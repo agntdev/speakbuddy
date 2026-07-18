@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Start Free Conversation",
+    "steps": [
+      {
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Begin open conversation practice with contextual prompts"
+            }
+          }
+        ],
+        "send": {
+          "callback": "free_chat:start"
+        }
+      }
+    ]
+  }
+]
