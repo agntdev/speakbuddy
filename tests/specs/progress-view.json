@@ -1,19 +1,46 @@
 [
   {
-    "name": "View Progress",
+    "name": "View Progress (no profile yet)",
     "steps": [
       {
+        "send": { "callback": "progress:view" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Show session history, learning streaks, and saved corrections"
+              "text": "You haven't set up your profile yet! Tap /start to begin."
             }
           }
-        ],
-        "send": {
-          "callback": "progress:view"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "view progress with profile",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:beginner" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "progress:view" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "📊 Your Progress\n\nLevel: Beginner\nSessions: 0\nSaved corrections: 0\nNo active streak yet — practice today to start one!\n\nNo saved corrections yet — start a free chat to get feedback on your writing!" } }
+        ]
       }
     ]
   }
