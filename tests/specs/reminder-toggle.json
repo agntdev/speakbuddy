@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Daily Reminder: On/Off",
+    "steps": [
+      {
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Enable/disable daily practice notifications"
+            }
+          }
+        ],
+        "send": {
+          "callback": "reminder:toggle"
+        }
+      }
+    ]
+  }
+]
