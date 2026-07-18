@@ -1,19 +1,46 @@
 [
   {
-    "name": "Start Free Conversation",
+    "name": "Start Free Conversation (no profile yet)",
     "steps": [
       {
+        "send": { "callback": "free_chat:start" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Begin open conversation practice with contextual prompts"
+              "text": "You haven't set up your profile yet! Tap /start to begin."
             }
           }
-        ],
-        "send": {
-          "callback": "free_chat:start"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "free chat with profile",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:intermediate" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "free_chat:start" },
+        "expect": [
+          { "method": "sendMessage" }
+        ]
       }
     ]
   }

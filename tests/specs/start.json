@@ -1,14 +1,81 @@
 [
   {
-    "name": "/start replies with the welcome + main menu",
+    "name": "onboarding: full level and topic selection",
     "steps": [
       {
         "send": { "text": "/start" },
         "expect": [
-          {
-            "method": "sendMessage",
-            "payload": { "text": "👋 Welcome! Tap a button below to get started." }
-          }
+          { "method": "sendMessage", "payload": { "text": "👋 Welcome to English Tutor! I'll help you improve your conversational English.\n\nFirst, what's your current level?" } }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:intermediate" },
+        "expect": [
+          { "method": "editMessageText", "payload": { "text": "Got it — 🟡 Intermediate.\n\nNow pick the topics you'd like to practice (tap to toggle, then tap Done):" } }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topic:grammar" },
+        "expect": [
+          { "method": "editMessageReplyMarkup" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "onboarding: beginner level with no topics",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "👋 Welcome to English Tutor! I'll help you improve your conversational English.\n\nFirst, what's your current level?" } }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:beginner" },
+        "expect": [
+          { "method": "editMessageText", "payload": { "text": "Got it — 🟢 Beginner.\n\nNow pick the topics you'd like to practice (tap to toggle, then tap Done):" } }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "returning user sees main menu",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "👋 Welcome to English Tutor! I'll help you improve your conversational English.\n\nFirst, what's your current level?" } }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:advanced" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "👋 Welcome! Tap a button below to get started." } }
         ]
       }
     ]

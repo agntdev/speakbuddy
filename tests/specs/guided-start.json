@@ -1,19 +1,46 @@
 [
   {
-    "name": "Start Guided Exercise",
+    "name": "Start Guided Exercise (no profile yet)",
     "steps": [
       {
+        "send": { "callback": "guided:start" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Begin structured language exercise with targeted feedback"
+              "text": "You haven't set up your profile yet! Tap /start to begin."
             }
           }
-        ],
-        "send": {
-          "callback": "guided:start"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "guided exercise with profile",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:beginner" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "guided:start" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "Pick a topic for your guided exercise:" } }
+        ]
       }
     ]
   }

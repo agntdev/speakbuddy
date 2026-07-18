@@ -1,12 +1,26 @@
 import { Composer } from "grammy";
 import { readdirSync } from "node:fs";
 import { createBot, type BotContext } from "./toolkit/index.js";
+import { initProfileStore } from "./profile-store.js";
+import { initSessionStore } from "./session-store.js";
 
-// The per-chat session shape (ephemeral conversation state only). Extend as the
-// bot grows. Durable domain data must NOT live here — use the toolkit's
-// persistent storage (see AGENTS.md).
+/** Per-chat ephemeral flow state. Durable data lives in the stores. */
 export interface Session {
-  // example: step?: "awaiting_amount";
+  step:
+    | "idle"
+    | "onboarding_awaiting_level"
+    | "onboarding_awaiting_topics"
+    | "free_chat"
+    | "guided_select_topic"
+    | "guided_active"
+    | "progress"
+    | "reminder";
+  selectedLevel?: "beginner" | "intermediate" | "advanced";
+  selectedTopics?: string[];
+  exercisePrompt?: string;
+  exerciseId?: string;
+  currentSessionId?: string;
+  userResponse?: string;
 }
 
 export type Ctx = BotContext<Session>;
@@ -19,8 +33,12 @@ export type Ctx = BotContext<Session>;
  */
 export async function buildBot(token: string) {
   const bot = createBot<Session>(token, {
-    initial: () => ({}),
+    initial: () => ({ step: "idle" }),
   });
+
+  // Initialize durable stores (in-memory by default; Redis in production).
+  initProfileStore();
+  initSessionStore();
 
   const dir = new URL("./handlers/", import.meta.url);
   let files: string[] = [];
@@ -34,7 +52,7 @@ export async function buildBot(token: string) {
     );
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
-    files = []; // no handlers/ dir yet → nothing to load
+    files = [];
   }
   for (const file of files.sort()) {
     const mod = (await import(new URL(file, dir).href)) as { default?: Composer<Ctx> };

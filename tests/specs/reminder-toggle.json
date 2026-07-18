@@ -1,19 +1,46 @@
 [
   {
-    "name": "Daily Reminder: On/Off",
+    "name": "Daily Reminder: On/Off (no profile yet)",
     "steps": [
       {
+        "send": { "callback": "reminder:toggle" },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Enable/disable daily practice notifications"
+              "text": "You haven't set up your profile yet! Tap /start to begin."
             }
           }
-        ],
-        "send": {
-          "callback": "reminder:toggle"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "toggle reminder with profile",
+    "steps": [
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          { "method": "sendMessage" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:level:beginner" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "onboard:topics:done" },
+        "expect": [
+          { "method": "editMessageText" }
+        ]
+      },
+      {
+        "send": { "callback": "reminder:toggle" },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "✅ Daily reminder is now ON.\n\nYou'll get a practice reminder every day at 9:00 AM." } }
+        ]
       }
     ]
   }
