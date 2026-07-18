@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Start Guided Exercise",
+    "steps": [
+      {
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Begin structured language exercise with targeted feedback"
+            }
+          }
+        ],
+        "send": {
+          "callback": "guided:start"
+        }
+      }
+    ]
+  }
+]
